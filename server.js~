@@ -1,0 +1,41 @@
+const express = require('express');
+const http = require('http');
+const socketIo = require('socket.io');
+
+const app = express();
+const server = http.createServer(app);
+const io = socketIo(server);
+
+app.use(express.static('public')); // Serve static files
+
+let users = {}; // Store users and their online status
+let messages = []; // Store messages
+
+io.on('connection', (socket) => {
+    console.log('A user connected', socket.id);
+
+    socket.on('join chat', (username) => {
+        users[socket.id] = { username, online: true };
+        socket.broadcast.emit('user status', users); // Inform others about the user's status
+        socket.emit('existing messages', messages); // Send existing messages to the newly joined user
+        io.emit('user status', users); // Update all clients with the current user statuses
+    });
+
+    socket.on('chat message', (msg) => {
+        const messageData = { user: users[socket.id].username, msg, timestamp: new Date() };
+        messages.push(messageData); // Store message
+        io.emit('chat message', messageData); // Broadcast message to all users
+    });
+
+    socket.on('disconnect', () => {
+        if (users[socket.id]) {
+            users[socket.id].online = false;
+            console.log(`${users[socket.id].username} disconnected`);
+            io.emit('user status', users); // Update all clients about the disconnect
+            delete users[socket.id]; // Optionally, you can delay this to allow for reconnections
+        }
+    });
+});
+
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`));

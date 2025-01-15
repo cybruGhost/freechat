@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat App</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const socket = io();
+
+        socket.on('connect', () => {
+          const username = prompt('What is your name?');
+          socket.emit('join chat', username);
+        });
+
+        socket.on('chat message', (data) => {
+          const messageElement = document.createElement('li');
+          messageElement.textContent = `${data.user}: ${data.msg}`;
+          document.getElementById('messages').appendChild(messageElement);
+        });
+
+        socket.on('user status', (users) => {
+          const userList = document.getElementById('userList');
+          userList.innerHTML = '';
+          Object.values(users).forEach(user => {
+            const userElement = document.createElement('li');
+            userElement.textContent = `${user.username} - ${user.online ? 'Online' : 'Offline'}`;
+            userList.appendChild(userElement);
+          });
+        });
+
+        document.getElementById('messageForm').addEventListener('submit', (e) => {
+          e.preventDefault();
+          const message = document.getElementById('input').value;
+          socket.emit('chat message', message);
+          document.getElementById('input').value = '';
+        });
+      });
+    </script>
+</head>
+<body>
+    <ul id="userList"></ul>
+    <ul id="messages"></ul>
+    <form id="messageForm">
+        <input id="input" autocomplete="off" /><button>Send</button>
+    </form>
+</body>
+</html>

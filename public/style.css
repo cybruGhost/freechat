@@ -1,0 +1,82 @@
+/* Basic Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body, html {
+  height: 100%;
+  font-family: Arial, sans-serif;
+}
+.container {
+  width: 95%;
+  max-width: 800px;
+  margin: auto;
+  padding: 30px;
+  border-radius: 15px;
+  background: linear-gradient(145deg, #f9a7a7, #a97ff9);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+.hidden {
+  display: none;
+}
+#messages {
+  list-style: none;
+  height: 400px;
+  overflow-y: auto;
+  margin-bottom: 20px;
+  padding: 10px;
+  background: #f0ebeb;
+  border-radius: 10px;
+}
+#messages li {
+  margin-bottom: 15px;
+  line-height: 1.6;
+}
+#input, #username {
+  width: calc(100% - 20px);
+  margin-bottom: 15px;
+  padding: 15px;
+  border: 2px solid #d3b8e6;
+  border-radius: 10px;
+  background-color: #faf0fa;
+}
+#sendMessage, #joinChat {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  background-color: #aa70e6;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+}
+#sendMessage:hover, #joinChat:hover {
+  background-color: #8d4ac4;
+}
+#fileInputLabel {
+  display: inline-block;
+  background-color: #f7e0fa;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 10px;
+  margin-right: 10px;
+}
+input[type="file"] {
+  display: none;
+}
+#userList {
+  margin-bottom: 15px;
+}
+.user-dot {
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 8px;
+}
+.online {
+  background-color: #4CAF50;
+}
+.offline {
+  background-color: #f44336;
+}

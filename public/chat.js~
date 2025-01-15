@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat App</title>
+    <link rel="stylesheet" href="style.css"> <!-- Make sure to include your CSS file -->
+</head>
+<body>
+    <div id="userList"></div>
+    <ul id="messages"></ul>
+    <form id="form" action="">
+        <input id="input" autocomplete="off" /><button>Send</button>
+    </form>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const form = document.getElementById('form');
+        const input = document.getElementById('input');
+        const messages = document.getElementById('messages');
+        const userList = document.getElementById('userList');
+
+        // Join the chat
+        socket.emit('join chat', 'UsernameHere'); // Replace 'UsernameHere' with dynamic username if available
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (input.value) {
+                socket.emit('chat message', input.value);
+                input.value = '';
+            }
+        });
+
+        socket.on('chat message', function(msg) {
+            const item = document.createElement('li');
+            item.textContent = msg.user + ": " + msg.msg;
+            messages.appendChild(item);
+            window.scrollTo(0, document.body.scrollHeight);
+        });
+
+        socket.on('existing messages', function(existingMessages) {
+            existingMessages.forEach(msg => {
+                const item = document.createElement('li');
+                item.textContent = msg.user + ": " + msg.msg;
+                messages.appendChild(item);
+            });
+            window.scrollTo(0, document.body.scrollHeight);
+        });
+
+        socket.on('user status', function(users) {
+            userList.innerHTML = ''; // Clear current list
+            Object.values(users).forEach(user => {
+                const userElement = document.createElement('div');
+                userElement.textContent = user.username + (user.online ? ' 🟢' : ' 🔴');
+                userList.appendChild(userElement);
+            });
+        });
+    </script>
+</body>
+</html>

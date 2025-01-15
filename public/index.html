@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat Application</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .logo {
+      width: 50px; /* Adjust the size as needed */
+      height: auto;
+      margin-right: 10px;
+    }
+    .container {
+      position: relative;
+      background: linear-gradient(145deg, #f9a7a7, #a97ff9);
+      width: 95%;
+      max-width: 800px;
+      margin: auto;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    }
+    .tab-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      background-color: #663399; /* Purple color */
+      padding: 10px 0;
+      border-top-left-radius: 15px;
+      border-top-right-radius: 15px;
+    }
+    .tab-item {
+      color: white;
+      text-align: center;
+      flex-grow: 1;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .tab-item:hover {
+      background-color: #4d2677; /* Darker purple on hover */
+    }
+    .active {
+      background-color: #4d2677; /* Darker purple for active tab */
+    }
+  </style>
+</head>
+<body>
+  <img src="path/to/your/logo.png" alt="Logo" class="logo">
+  <div class="container">
+    <!-- Your container content -->
+    <div id="loginPage" class="container">
+        <h1>Welcome to Megan Chat</h1>
+        <img src="megan_logo.png" alt="Megan Logo">
+        <p>Enter a username to join the chat anonymously:</p>
+      <input type="text" id="username" placeholder="Enter your name" autocomplete="off">
+      <button id="joinChat">Join Chat</button>
+    </div>
+    <!-- Chat Page -->
+  <div id="chatPage" class="container hidden">
+    <div class="header">
+      <div class="logo">Megan</div>
+      <button id="settingsButton" class="button">Settings</button>
+    </div>
+    <div class="tabs">
+      <div id="chatsTab" class="tab-item active">Chats</div>
+      <div id="statusTab" class="tab-item">Status</div>
+      <div id="callsTab" class="tab-item">Calls</div>
+    </div>
+    <div id="userList" class="user-list"></div>
+    <ul id="messages" class="message-list"></ul>
+    <div class="message-input">
+      <textarea id="input" placeholder="Type a message..." autocomplete="off"></textarea>
+      <label for="fileInput" id="fileInputLabel" class="attach-button">📎 Attach</label>
+      <input type="file" id="fileInput" hidden>
+      <button id="sendMessage" class="button">Send</button>
+    </div>
+  </div>
+
+  <!-- Settings Page -->
+  <div id="settingsPage" class="container hidden">
+    <button id="backButton" class="button">Back</button>
+    <h2 class="settings-heading">Settings</h2>
+    <!-- Add your settings content here -->
+  </div>
+
+
+  <!-- Scripts -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="chat.js"></script>
+  <script>
+    // JavaScript code for handling chat functionality and tab
+    const chatsTab = document.getElementById('chatsTab');
+    const statusTab = document.getElementById('statusTab');
+    const callsTab = document.getElementById('callsTab');
+    const chatsContent = document.getElementById('chatsContent');
+    const statusContent = document.getElementById('statusContent');
+    const callsContent = document.getElementById('callsContent');
+
+    chatsTab.addEventListener('click', () => {
+      chatsTab.classList.add('active-tab');
+      statusTab.classList.remove('active-tab');
+      callsTab.classList.remove('active-tab');
+      chatsContent.classList.remove('hidden-tab-content');
+      statusContent.classList.add('hidden-tab-content');
+      callsContent.classList.add('hidden-tab-content');
+    });
+
+    statusTab.addEventListener('click', () => {
+      chatsTab.classList.remove('active-tab');
+      statusTab.classList.add('active-tab');
+      callsTab.classList.remove('active-tab');
+      chatsContent.classList.add('hidden-tab-content');
+      statusContent.classList.remove('hidden-tab-content');
+      callsContent.classList.add('hidden-tab-content');
+    });
+
+    callsTab.addEventListener('click', () => {
+      window.location.href = 'call.html';
+      chatsTab.classList.remove('active-tab');
+      statusTab.classList.remove('active-tab');
+      callsTab.classList.add('active-tab');
+      chatsContent.classList.add('hidden-tab-content');
+      statusContent.classList.add('hidden-tab-content');
+      callsContent.classList.remove('hidden-tab-content');
+    });
+  </script>
+    
+  </script>
+</body>
+</html>
